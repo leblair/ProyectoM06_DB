@@ -2,13 +2,13 @@ package com.example;
 
 import com.mongodb.client.*;
 import org.bson.Document;
-import static com.mongodb.client.model.Filters.eq;
+import java.util.stream.Stream;
 
-public class DatabaseMongo extends Database{
+public class DatabaseMongo implements Database {
 
 
     @Override
-    void insertarPelicula(String title) {
+    public void insertarPelicula(String title) {
         String uri = "mongodb://localhost";
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("sampledb");
@@ -24,16 +24,26 @@ public class DatabaseMongo extends Database{
     }
 
     @Override
-    void consultarPelicula() {
+    public Stream<Pelicula> consultarPelicula() {
         String uri = "mongodb://localhost";
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("sampledb");
-            //ongoCollection<Document> collection = database.getCollection("movies");
-            FindIterable<Document> iterable  = database.getCollection("movies").find();
+            //MongoCollection<Document> collection = database.getCollection("movies");
+            FindIterable<Document> iterable = database.getCollection("movies").find();
             iterable.forEach(document -> System.out.println(document));
 
         }
         //QUERY
-//
+        return null;
+    }
+
+    @Override
+    public void insertarCancion(String title) {
+
+    }
+
+    @Override
+    public Stream<Cancion> consultarCancion() {
+        return null;
     }
 }

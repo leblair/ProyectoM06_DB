@@ -1,8 +1,11 @@
 package com.example;
 
-public abstract class Database {
+import java.util.stream.Stream;
 
-    abstract void insertarPelicula(String title);
+public interface Database {
+    void insertarPelicula(String title);
+    Stream<Pelicula> consultarPelicula();
+    void insertarCancion(String title);
+    Stream<Cancion> consultarCancion();
 
-    abstract void consultarPelicula();
 }

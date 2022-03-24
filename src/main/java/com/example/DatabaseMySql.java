@@ -1,12 +1,14 @@
 package com.example;
 
 import java.sql.*;
+import java.util.stream.Stream;
 
-public class DatabaseMySql extends Database{
+public class DatabaseMySql implements Database {
 
     @Override
-    void insertarPelicula(String title) {
+    public void insertarPelicula(String title) {
         String uri = "jdbc:mysql://localhost/mydatabase?user=myuser&password=mypass";
+
         try (Connection conn = DriverManager.getConnection(uri)) {
             //INSERT
             PreparedStatement statement = conn.prepareStatement("INSERT INTO movies(title) VALUES(?)");
@@ -20,7 +22,7 @@ public class DatabaseMySql extends Database{
     }
 
     @Override
-    void consultarPelicula() {
+    public Stream<Pelicula> consultarPelicula() {
         String uri = "jdbc:mysql://localhost/mydatabase?user=myuser&password=mypass";
 
         try (Connection conn = DriverManager.getConnection(uri)) {
@@ -36,5 +38,16 @@ public class DatabaseMySql extends Database{
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        return null;
+    }
+
+    @Override
+    public void insertarCancion(String title) {
+
+    }
+
+    @Override
+    public Stream<Cancion> consultarCancion() {
+        return null;
     }
 }
