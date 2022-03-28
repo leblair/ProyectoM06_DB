@@ -8,15 +8,6 @@ import java.util.List;
 
 public abstract class RepositoryMySQL<T> implements Repository<T> {
     static Connection conn;
-//    @Override
-//    public void init(){
-//        try{
-//            conn = DriverManager.getConnection(System.getProperty("sqlurl"));
-//        }catch (SQLException e){
-//            e.printStackTrace();
-//        }
-//    }
-
 
     @Override
     public void init() {
