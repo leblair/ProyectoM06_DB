@@ -24,7 +24,7 @@ public class DatabaseMongo implements Database {
     }
 
     @Override
-    public Stream<Pelicula> consultarPelicula() {
+    public Stream<Movies> consultarPelicula() {
         String uri = "mongodb://localhost";
         try (MongoClient mongoClient = MongoClients.create(uri)) {
             MongoDatabase database = mongoClient.getDatabase("sampledb");

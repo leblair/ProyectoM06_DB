@@ -4,7 +4,7 @@ import java.util.stream.Stream;
 
 public interface Database {
     void insertarPelicula(String title);
-    Stream<Pelicula> consultarPelicula();
+    Stream<Movies> consultarPelicula();
     void insertarCancion(String title);
     Stream<Cancion> consultarCancion();
 

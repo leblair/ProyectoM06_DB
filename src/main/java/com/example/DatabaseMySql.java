@@ -22,7 +22,7 @@ public class DatabaseMySql implements Database {
     }
 
     @Override
-    public Stream<Pelicula> consultarPelicula() {
+    public Stream<Movies> consultarPelicula() {
         String uri = "jdbc:mysql://localhost/mydatabase?user=myuser&password=mypass";
 
         try (Connection conn = DriverManager.getConnection(uri)) {
