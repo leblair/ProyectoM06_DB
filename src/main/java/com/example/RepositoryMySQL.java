@@ -20,18 +20,19 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
 
     public void insert(T t) {
         try {
-            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO " + getTableName() + " VALUES(" + "?".repeat(getFields().length - 1) + "?");
-            for (int i = 1; i < getFields().length; i++) {
-                preparedStatement.setObject(i, t.getClass().getDeclaredField(getFields()[i - 1].getName()).get(t));
+            System.out.println("INSERT INTO " + getTableName() + "(" + getFields()[0].getName() +  ") VALUES(" + "?".repeat(getFields().length - 1) + ")");
+            PreparedStatement preparedStatement = conn.prepareStatement("INSERT INTO " + getTableName() +
+                    "(" + getFields()[0].getName() +
+                    ") VALUES(" + "?".repeat(getFields().length - 1) + ")");
+            for (int i = 0; i < getFields().length - 1; i++) {
+                System.out.println(t.getClass().getDeclaredField(getFields()[i].getName()).get(t));
+                preparedStatement.setObject(i+1, t.getClass().getDeclaredField(getFields()[i].getName()).get(t));
             }
+//            preparedStatement.setObject(1, t.getClass().getDeclaredField(getFields()[0].getName()).get(t));
             preparedStatement.executeUpdate();
 
-        } catch (SQLException throwables) {
+        } catch (SQLException | NoSuchFieldException | IllegalAccessException throwables) {
             throwables.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
     }
 
@@ -43,7 +44,6 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
             while (resultSet.next()) {
                 T t = getNewInstance();
                 for (Field field : getFields()) {
-
                     t.getClass().getDeclaredField(field.getName()).set(t, resultSet.getObject(field.getName()));
                 }
                 list.add(t);
@@ -54,7 +54,7 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
         return list;
     }
 
-    void update(T t) {
+    public void update(T t) {
         try {
             PreparedStatement preparedStatement = conn.prepareStatement("UPDATE " + getTableName() + " SET title = " + "?" + "WHERE id =" + "?");
             System.out.println(t.getClass().getDeclaredField("title").get(t));
@@ -62,12 +62,18 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
             preparedStatement.setObject(2, t.getClass().getDeclaredField("id").get(t));
             preparedStatement.executeUpdate();
 
+        } catch (SQLException | NoSuchFieldException | IllegalAccessException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    public void delete(int id) {
+        try {
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM " + getTableName() + " WHERE " + getFields()[getFields().length -1].getName()+" = " + id);
+            preparedStatement.executeUpdate();
+
         } catch (SQLException throwables) {
             throwables.printStackTrace();
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
         }
     }
 }

@@ -1,17 +1,16 @@
 package com.example;
 
-import com.mysql.cj.xdevapi.Table;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
-import java.util.Locale;
 
 public interface Repository<T> {
 
     void init();
     void insert(T t);
     List<T> getAll();
+    void update(T t);
+    void delete(int id);
 
     default T getNewInstance() {
         try {

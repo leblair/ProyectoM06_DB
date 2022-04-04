@@ -42,6 +42,7 @@ public class Movies {
                 .toString());
     }
 
+
 //    static Stream<String> toDetail(Pelicula p) {
 //        return Stream.of(new StringJoiner(", ", Pelicula.class.getSimpleName() + ": ", "")
 //                        .add("personid=\33[34m" + p.id + "\33[0m")

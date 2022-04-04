@@ -7,7 +7,7 @@ import java.sql.SQLException;
 
 public class PeliculaRepositorySQL  extends RepositoryMySQL<Movies> implements PeliculaRepository {
     @Override
-    public void poulate() {
+    public void populate() {
         String uri = "jdbc:mysql://localhost/mydatabase?user=myuser&password=mypass";
 
         try (Connection conn = DriverManager.getConnection(uri)) {
