@@ -5,46 +5,50 @@ import java.util.Scanner;
 
 public class Demo {
     static Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
-    static PeliculaRepository peliculaRepository ;
+    static EntrenadoresRepository entrenadorRepository;
 
     public static void main(String[] args) {
         System.out.println("What database do you want to use: 1:MongoDB/ 2:MySQL");
         int opcion = scanner.nextInt();
         if (opcion == 1) {
-            peliculaRepository = new PeliculaRepositoryMongo();
+            entrenadorRepository = new EntrenadoresRepositoryMongo();
         }else if(opcion == 2) {
-            peliculaRepository = new PeliculaRepositorySQL();
+            entrenadorRepository = new EntrenadoresRepositorySQL();
         }
 
-        peliculaRepository.init();
+        entrenadorRepository.init();
         startApp();
     }
 
     static void startApp() {
         while (true) {
             System.out.println("\33[1;30;45m--- MASTER SCREEN ---\33[0m\n");
-            peliculaRepository.getAll();
-            peliculaRepository.getAll().stream().flatMap(Movies::toMaster).forEach(System.out::println);
+            entrenadorRepository.getAll();
+            entrenadorRepository.getAll().stream().flatMap(Entrenadores::toMaster).forEach(System.out::println);
             System.out.print("\n\33[1;30;45m[PERSON] CREATE/READ/UPDATE/DELETE or QUIT:\33[0m ");
             String option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
 
             if (option.equals("q")) {
                 break;
             } else if (option.equals("c")) {
-                System.out.print("Movie Title: ");
-                String title = scanner.next();
-                Movies movie = new Movies(title);
-                peliculaRepository.insert(movie);
+                System.out.print("Trainer Name:");
+                String name = scanner.next();
+                System.out.print("Trainer Age:");
+                int age = scanner.nextInt();
+                Entrenadores trainer = new Entrenadores(name,age);
+                entrenadorRepository.insert(trainer);
             } else {
-                System.out.print("Movie ID: ");
-                int movieid = scanner.nextInt();
+                System.out.print("Trainer ID: ");
+                int trainerId = scanner.nextInt();
                 if (option.equals("c")) {
                 } else if (option.equals("u")) {
-                    System.out.print("New movie title : ");
+                    System.out.print("New Trainer name : ");
                     String newName = scanner.next();
-                    peliculaRepository.update(new Movies(newName, movieid));
+                    System.out.print("New Trainer age : ");
+                    int newAge = scanner.nextInt();
+                    entrenadorRepository.update(new Entrenadores(newName,newAge, trainerId));
                 } else if (option.equals("d")) {
-                    peliculaRepository.delete(movieid);
+                    entrenadorRepository.delete(trainerId);
                 }
 //                else if (option.equals("r")) {
 //                    while (true) {

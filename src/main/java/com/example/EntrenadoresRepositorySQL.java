@@ -5,10 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class PeliculaRepositorySQL  extends RepositoryMySQL<Movies> implements PeliculaRepository {
+public class EntrenadoresRepositorySQL extends RepositoryMySQL<Entrenadores> implements EntrenadoresRepository {
     @Override
     public void populate() {
-        String uri = "jdbc:mysql://localhost/mydatabase?user=myuser&password=mypass";
+        String uri = "jdbc:mysql://localhost/mydatabase2?user=myuser&password=mypass";
 
         try (Connection conn = DriverManager.getConnection(uri)) {
             //INSERT

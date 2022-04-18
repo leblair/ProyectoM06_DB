@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class CancionRepositorySQL extends RepositoryMySQL<Cancion> implements CancionRepository {
     @Override
     public void poulate() {
-        String uri = "jdbc:mysql://localhost/mydatabase?user=myuser&password=mypass";
+        String uri = "jdbc:mysql://localhost/mydatabase2?user=myuser&password=mypass";
 
         try (Connection conn = DriverManager.getConnection(uri)) {
             //INSERT
