@@ -6,25 +6,39 @@ import java.util.Scanner;
 public class Demo {
     static Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
     static EntrenadoresRepository entrenadorRepository;
+    static PokemonsRepository pokemonsRepository;
+    static int opcion;
+    static int opcionTable;
 
     public static void main(String[] args) {
         System.out.println("What database do you want to use: 1:MongoDB/ 2:MySQL");
-        int opcion = scanner.nextInt();
+        opcion = scanner.nextInt();
         if (opcion == 1) {
             entrenadorRepository = new EntrenadoresRepositoryMongo();
-        }else if(opcion == 2) {
+            pokemonsRepository = new PokemonsRepositoryMongo();
+        } else if (opcion == 2) {
             entrenadorRepository = new EntrenadoresRepositorySQL();
+            pokemonsRepository = new PokemonRepositorySQL();
         }
+        System.out.println("What Table do you want to use: 1:Entrenadores/ 2:Pokemon");
+        opcionTable = scanner.nextInt();
 
-        entrenadorRepository.init();
-        startApp();
+        if (opcionTable == 1) {
+            entrenadorRepository.init();
+            startAppEntrenador();
+        } else {
+            pokemonsRepository.init();
+            startAppPokemon();
+        }
     }
 
-    static void startApp() {
+    static void startAppEntrenador() {
         while (true) {
+            Entrenadores trainer;
             System.out.println("\33[1;30;45m--- MASTER SCREEN ---\33[0m\n");
-            entrenadorRepository.getAll();
+
             entrenadorRepository.getAll().stream().flatMap(Entrenadores::toMaster).forEach(System.out::println);
+
             System.out.print("\n\33[1;30;45m[PERSON] CREATE/READ/UPDATE/DELETE or QUIT:\33[0m ");
             String option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
 
@@ -35,48 +49,92 @@ public class Demo {
                 String name = scanner.next();
                 System.out.print("Trainer Age:");
                 int age = scanner.nextInt();
-                Entrenadores trainer = new Entrenadores(name,age);
-                entrenadorRepository.insert(trainer);
+
+                trainer = new Entrenadores(name, age);
+
+
+                try {
+                    entrenadorRepository.insert(trainer);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
             } else {
-                System.out.print("Trainer ID: ");
-                int trainerId = scanner.nextInt();
+                System.out.print("Trainer Name: ");
+                String trainerName = "";
+
+                trainerName = scanner.next();
+
                 if (option.equals("c")) {
                 } else if (option.equals("u")) {
                     System.out.print("New Trainer name : ");
                     String newName = scanner.next();
                     System.out.print("New Trainer age : ");
                     int newAge = scanner.nextInt();
-                    entrenadorRepository.update(new Entrenadores(newName,newAge, trainerId));
+                    if (opcion == 1) {
+                        entrenadorRepository.update(new Entrenadores(newName, newAge), trainerName);
+                    } else {
+                        entrenadorRepository.update(new Entrenadores(newName, newAge), trainerName);
+                    }
+
                 } else if (option.equals("d")) {
-                    entrenadorRepository.delete(trainerId);
+                    entrenadorRepository.delete(trainerName);
                 }
-//                else if (option.equals("r")) {
-//                    while (true) {
-//                        System.out.println("\33[1;30;104m--- DETAIL SCREEN ---\33[0m\n");
-////                        repository.readPerson(personid).flatMap(Person::toDetail).forEach(System.out::println);
-//                        System.out.print("\n\33[1;30;104m[THING] CREATE/UPDATE/DELETE or BACK:\33[0m ");
-//                        option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
-//                        if (option.equals("b")) {
-//                            break;
-//                        } else if (option.equals("c")) {
-//                            System.out.println("Thing title: ");
-//                            String title = scanner.next();
-//                            repository.createThing(new Thing(title, personid));
-//                        } else {
-//                            System.out.print("Thing ID: ");
-//                            int thingid = scanner.nextInt();
-//
-//                            if (option.equals("u")) {
-//                                System.out.println("Thing new title: ");
-//                                String newTitle = scanner.next();
-//                                repository.updateThing(new Thing(thingid, newTitle));
-//                            } else if (option.equals("d")) {
-//                                repository.deleteThing(thingid);
-//                            }
+            }
+        }
+    }
+
+    static void startAppPokemon() {
+        while (true) {
+            Pokemons pokemon;
+            System.out.println("\33[1;30;45m--- MASTER SCREEN ---\33[0m\n");
+
+            pokemonsRepository.getAll().stream().flatMap(Pokemons::toMaster).forEach(System.out::println);
+
+            System.out.print("\n\33[1;30;45m[PERSON] CREATE/READ/UPDATE/DELETE or QUIT:\33[0m ");
+            String option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
+
+            if (option.equals("q")) {
+                break;
+            } else if (option.equals("c")) {
+                System.out.print("Pokemon Name:");
+                String name = scanner.next();
+                System.out.print("Pokemon Type1:");
+                String tipo1 = scanner.next();
+                System.out.print("Pokemon Type2:");
+                String tipo2 = scanner.next();
+                pokemon = new Pokemons(name, tipo1, tipo2);
+
+
+                try {
+                    pokemonsRepository.insert(pokemon);
+                } catch (NoSuchFieldException | IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.print("Pokemon Name: ");
+                String pokemonName = "";
+
+                pokemonName = scanner.next();
+
+                if (option.equals("c")) {
+                } else if (option.equals("u")) {
+                    System.out.print("New Pokemon name : ");
+                    String newName = scanner.next();
+                    System.out.print("New Pokemon type1 : ");
+                    String newType1 = scanner.next();
+                    System.out.print("New Pokemon type2 : ");
+                    String newType2 = scanner.next();
+                    if (opcion == 1) {
+                        pokemonsRepository.update(new Pokemons(newName, newType1, newType2), pokemonName);
+                    } else {
+                        pokemonsRepository.update(new Pokemons(newName, newType1, newType2), pokemonName);
+                    }
+
+                } else if (option.equals("d")) {
+                    entrenadorRepository.delete(pokemonName);
+                }
             }
         }
     }
 }
 
-//    }
-//}

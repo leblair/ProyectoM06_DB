@@ -12,3 +12,12 @@ CREATE TABLE entrenadores (
      med8 CHAR(255),
      PRIMARY KEY (id)
 );
+
+CREATE TABLE pokemons (
+     id MEDIUMINT NOT NULL AUTO_INCREMENT,
+     name CHAR(255) NOT NULL,
+     tipo_principal CHAR(255) NOT NULL,
+     tipo_secundario CHAR(255),
+     PRIMARY KEY (id)
+);
+

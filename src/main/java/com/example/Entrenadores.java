@@ -1,5 +1,6 @@
 package com.example;
 
+
 import java.util.StringJoiner;
 import java.util.stream.Stream;
 
@@ -17,11 +18,6 @@ public class Entrenadores {
     Integer id;
 
     public Entrenadores() {
-
-    }
-
-    public Entrenadores(String name) {
-        this.name = name;
     }
 
     public Entrenadores(String name, int age, Integer id) {
@@ -43,28 +39,13 @@ public class Entrenadores {
         this.med6 = med6;
         this.med7 = med7;
         this.med8 = med8;
+
         this.id = id;
     }
 
     public Entrenadores(String title, int age) {
         this.age=age;
         this.name =title;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     static Stream<String> toMaster(Entrenadores p) {
@@ -83,12 +64,4 @@ public class Entrenadores {
                 .toString());
     }
 
-
-//    static Stream<String> toDetail(Pelicula p) {
-//        return Stream.of(new StringJoiner(", ", Pelicula.class.getSimpleName() + ": ", "")
-//                        .add("personid=\33[34m" + p.id + "\33[0m")
-//                        .add("name='\33[34m" + p.name + "\33[0m'")
-//                        .toString(),
-//                "\t" + p.things.flatMap(Thing::toDetail).collect(Collectors.joining("\n\t")));
-//    }
 }

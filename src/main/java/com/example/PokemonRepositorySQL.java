@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class CancionRepositorySQL extends RepositoryMySQL<Cancion> implements CancionRepository {
+public class PokemonRepositorySQL extends RepositoryMySQL<Pokemons> implements PokemonsRepository {
     @Override
     public void poulate() {
         String uri = "jdbc:mysql://localhost/mydatabase2?user=myuser&password=mypass";

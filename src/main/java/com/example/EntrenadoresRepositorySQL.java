@@ -22,4 +22,9 @@ public class EntrenadoresRepositorySQL extends RepositoryMySQL<Entrenadores> imp
             e.printStackTrace();
         }
     }
+
+    @Override
+    public Integer getLastId() {
+        return null;
+    }
 }

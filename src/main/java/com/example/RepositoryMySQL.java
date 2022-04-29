@@ -3,7 +3,6 @@ package com.example;
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -13,7 +12,9 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
     @Override
     public void init() {
         try {
+            System.out.println("aaaaaaaaaaaaaaaaaaaaa");
             conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase2?user=myuser&password=mypass");
+
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -64,11 +65,11 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
         return list;
     }
 
-    public void update(T t) {
+    public void update(T t, String name) {
         try {
-            PreparedStatement preparedStatement = conn.prepareStatement("UPDATE " + getTableName() + " SET title = " + "?" + "WHERE id =" + "?");
-            preparedStatement.setObject(1, t.getClass().getDeclaredField("title").get(t));
-            preparedStatement.setObject(2, t.getClass().getDeclaredField("id").get(t));
+            PreparedStatement preparedStatement = conn.prepareStatement("UPDATE " + getTableName() + " SET name = " + "?" + "WHERE name =" + "?");
+            preparedStatement.setObject(1, t.getClass().getDeclaredField("name").get(t));
+            preparedStatement.setObject(2, name);
             preparedStatement.executeUpdate();
 
         } catch (SQLException | NoSuchFieldException | IllegalAccessException throwables) {
@@ -76,9 +77,10 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
         }
     }
 
-    public void delete(int id) {
+    public void delete(String name) {
         try {
-            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM " + getTableName() + " WHERE " + getFields()[getFields().length - 1].getName() + " = " + id);
+            System.out.println("DELETE FROM " + getTableName() + " WHERE " + getFields()[0].getName() + " = " + name);
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM " + getTableName() + " WHERE " + getFields()[0].getName() + " = " + "\'" +name +"\'");
             preparedStatement.executeUpdate();
 
         } catch (SQLException throwables) {

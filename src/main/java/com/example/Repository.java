@@ -7,10 +7,10 @@ import java.util.List;
 public interface Repository<T> {
 
     void init();
-    void insert(T t);
+    void insert(T t) throws NoSuchFieldException, IllegalAccessException;
     List<T> getAll();
-    void update(T t);
-    void delete(int id);
+    void update(T t , String name);
+    void delete(String name);
 
     default T getNewInstance() {
         try {
@@ -37,5 +37,3 @@ public interface Repository<T> {
     }
 }
 
-
-// com.example.db.dsffsd.Movie
