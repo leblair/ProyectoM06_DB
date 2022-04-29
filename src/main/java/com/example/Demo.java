@@ -1,5 +1,7 @@
 package com.example;
 
+import org.bson.types.ObjectId;
+
 import java.util.Locale;
 import java.util.Scanner;
 
@@ -36,8 +38,12 @@ public class Demo {
         while (true) {
             Entrenadores trainer;
             System.out.println("\33[1;30;45m--- MASTER SCREEN ---\33[0m\n");
+            if (opcion == 1) {
+                entrenadorRepository.getAll().stream().flatMap(Entrenadores::toMasterMongo).forEach(System.out::println);
 
-            entrenadorRepository.getAll().stream().flatMap(Entrenadores::toMaster).forEach(System.out::println);
+            } else {
+                entrenadorRepository.getAll().stream().flatMap(Entrenadores::toMaster).forEach(System.out::println);
+            }
 
             System.out.print("\n\33[1;30;45m[PERSON] CREATE/READ/UPDATE/DELETE or QUIT:\33[0m ");
             String option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
@@ -49,10 +55,11 @@ public class Demo {
                 String name = scanner.next();
                 System.out.print("Trainer Age:");
                 int age = scanner.nextInt();
-
-                trainer = new Entrenadores(name, age);
-
-
+                if (opcion == 1) {
+                    trainer = new Entrenadores(name, age, new ObjectId());
+                } else {
+                    trainer = new Entrenadores(name, age);
+                }
                 try {
                     entrenadorRepository.insert(trainer);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
@@ -87,8 +94,13 @@ public class Demo {
         while (true) {
             Pokemons pokemon;
             System.out.println("\33[1;30;45m--- MASTER SCREEN ---\33[0m\n");
+            if (opcion == 1) {
+                pokemonsRepository.getAll().stream().flatMap(Pokemons::toMasterMongo).forEach(System.out::println);
 
-            pokemonsRepository.getAll().stream().flatMap(Pokemons::toMaster).forEach(System.out::println);
+            } else {
+                pokemonsRepository.getAll().stream().flatMap(Pokemons::toMaster).forEach(System.out::println);
+
+            }
 
             System.out.print("\n\33[1;30;45m[PERSON] CREATE/READ/UPDATE/DELETE or QUIT:\33[0m ");
             String option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
@@ -102,7 +114,11 @@ public class Demo {
                 String tipo1 = scanner.next();
                 System.out.print("Pokemon Type2:");
                 String tipo2 = scanner.next();
-                pokemon = new Pokemons(name, tipo1, tipo2);
+                if (opcion == 1) {
+                    pokemon = new Pokemons(name, tipo1, tipo2, new ObjectId());
+                } else {
+                    pokemon = new Pokemons(name, tipo1, tipo2);
+                }
 
 
                 try {
@@ -131,7 +147,7 @@ public class Demo {
                     }
 
                 } else if (option.equals("d")) {
-                    entrenadorRepository.delete(pokemonName);
+                    pokemonsRepository.delete(pokemonName);
                 }
             }
         }

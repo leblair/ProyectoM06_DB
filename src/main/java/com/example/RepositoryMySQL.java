@@ -1,5 +1,7 @@
 package com.example;
 
+import org.bson.types.ObjectId;
+
 import java.lang.reflect.Field;
 import java.sql.*;
 import java.util.ArrayList;
@@ -12,7 +14,7 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
     @Override
     public void init() {
         try {
-            System.out.println("aaaaaaaaaaaaaaaaaaaaa");
+
             conn = DriverManager.getConnection("jdbc:mysql://localhost/mydatabase2?user=myuser&password=mypass");
 
         } catch (SQLException e) {
@@ -22,20 +24,20 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
 
     public void insert(T t) {
         try {
-            String insert="INSERT INTO " + getTableName() +
+            String insert = "INSERT INTO " + getTableName() +
                     " (";
-            for (int i = 0; i < getFields().length-1; i++) {
-                if(i== getFields().length-2){
-                    insert += getFields()[i].getName() ;
-                }else{
+            for (int i = 0; i < getFields().length - 2; i++) {
+                if (i == getFields().length - 3) {
+                    insert += getFields()[i].getName();
+                } else {
                     insert += getFields()[i].getName() + ",";
                 }
 
             }
-            insert += ") VALUES(" + " ?, ".repeat(getFields().length - 2) + "?" + ")";
+            insert += ") VALUES(" + " ?, ".repeat(getFields().length - 3) + "?" + ")";
             PreparedStatement preparedStatement = conn.prepareStatement(insert);
 
-            for (int i = 0; i < getFields().length - 1; i++) {
+            for (int i = 0; i < getFields().length - 2; i++) {
                 preparedStatement.setObject(i + 1, t.getClass().getDeclaredField(getFields()[i]
                         .getName()).get(t));
             }
@@ -55,7 +57,9 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
             while (resultSet.next()) {
                 T t = getNewInstance();
                 for (Field field : getFields()) {
-                    t.getClass().getDeclaredField(field.getName()).set(t, resultSet.getObject(field.getName()));
+                    if (field.getType() != ObjectId.class) {
+                        t.getClass().getDeclaredField(field.getName()).set(t, resultSet.getObject(field.getName()));
+                    }
                 }
                 list.add(t);
             }
@@ -80,7 +84,7 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
     public void delete(String name) {
         try {
             System.out.println("DELETE FROM " + getTableName() + " WHERE " + getFields()[0].getName() + " = " + name);
-            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM " + getTableName() + " WHERE " + getFields()[0].getName() + " = " + "\'" +name +"\'");
+            PreparedStatement preparedStatement = conn.prepareStatement("DELETE FROM " + getTableName() + " WHERE " + getFields()[0].getName() + " = " + "\'" + name + "\'");
             preparedStatement.executeUpdate();
 
         } catch (SQLException throwables) {

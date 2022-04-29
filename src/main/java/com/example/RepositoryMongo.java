@@ -18,12 +18,14 @@ public class RepositoryMongo<T> implements Repository<T> {
     public void init() {
         mongoClient = MongoClients.create("mongodb://localhost");
     }
+
     @Override
     public void insert(Object o)  {
 
         MongoDatabase database = mongoClient.getDatabase("sampledb");
         MongoCollection<Document> collection = database.getCollection(getTableName());
         Document doc = new Document();
+
         for (Field field : getFields()) {
             try {
                 doc.append(field.getName(),o.getClass().getDeclaredField(field.getName()).get(o));
@@ -85,4 +87,5 @@ public class RepositoryMongo<T> implements Repository<T> {
         MongoDatabase database = mongoClient.getDatabase("sampledb");
         database.getCollection(getTableName()).findOneAndDelete(eq("name",name));
     }
+
 }
