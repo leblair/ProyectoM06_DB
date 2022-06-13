@@ -2,7 +2,7 @@ package com.example;
 
 import com.mongodb.client.MongoDatabase;
 
-public class EntrenadoresRepositoryMongo extends RepositoryMongo<Entrenadores> implements EntrenadoresRepository {
+public class ArtistsRepositoryMongo extends RepositoryMongo<Artists> implements ArtistsRepository {
 
     @Override
     public void populate() {
@@ -12,7 +12,7 @@ public class EntrenadoresRepositoryMongo extends RepositoryMongo<Entrenadores> i
     @Override
     public Integer getLastId() {
         MongoDatabase database = mongoClient.getDatabase("sampledb");
-        database.getCollection("entrenadores").find().limit(1);
+        database.getCollection("artists").find().limit(1);
         return null;
     }
 

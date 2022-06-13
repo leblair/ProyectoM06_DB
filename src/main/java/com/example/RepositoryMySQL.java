@@ -72,25 +72,24 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
     public void update(T t, String name) {
         try {
             int count = 0;
-            for (Field field: getFields()
+            for (Field field : getFields()
             ) {
-                if (t.getClass().getDeclaredField(field.getName()).get(t) != null && !field.getName().equals("id") && !field.getName().equals("_id") ){
+                if (t.getClass().getDeclaredField(field.getName()).get(t) != null && !field.getName().equals("id") && !field.getName().equals("_id")) {
 
                     String update = "UPDATE " + getTableName() + " SET ";
-                    update +=  field.getName() +" = " + "? " + "WHERE " + getFields()[0].getName() +" =" + "?";
+                    update += field.getName() + " = " + "? " + "WHERE " + getFields()[0].getName() + " =" + "?";
                     System.out.println(update);
-                    PreparedStatement preparedStatement=  conn.prepareStatement(update);
+                    PreparedStatement preparedStatement = conn.prepareStatement(update);
                     preparedStatement.setObject(1, t.getClass().getDeclaredField(field.getName()).get(t));
-                    if (count == 0){
+                    if (count == 0) {
                         preparedStatement.setObject(2, name);
-                    }else{
+                    } else {
                         preparedStatement.setObject(2, t.getClass().getDeclaredField(getFields()[0].getName()).get(t));
                     }
-                    count ++;
+                    count++;
 
                     preparedStatement.executeUpdate();
                 }
-
 
 
             }
@@ -99,6 +98,7 @@ public abstract class RepositoryMySQL<T> implements Repository<T> {
             throwables.printStackTrace();
         }
     }
+
     public void delete(String name) {
         try {
             System.out.println("DELETE FROM " + getTableName() + " WHERE " + getFields()[0].getName() + " = " + name);

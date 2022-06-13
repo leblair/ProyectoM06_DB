@@ -5,149 +5,151 @@ import org.bson.types.ObjectId;
 import java.util.Locale;
 import java.util.Scanner;
 
+
 public class Demo {
-    static Scanner scanner = new Scanner(System.in).useDelimiter("\\n");
-    static EntrenadoresRepository entrenadorRepository;
-    static PokemonsRepository pokemonsRepository;
+    static Scanner sc = new Scanner(System.in).useDelimiter("\\n");
+    static ArtistsRepository artistRepository;
+    static SongsRepository songsRepository;
     static int opcion;
     static int opcionTable;
 
+
     public static void main(String[] args) {
         System.out.println("What database do you want to use: 1:MongoDB/ 2:MySQL");
-        opcion = scanner.nextInt();
+        opcion = sc.nextInt();
         if (opcion == 1) {
-            entrenadorRepository = new EntrenadoresRepositoryMongo();
-            pokemonsRepository = new PokemonsRepositoryMongo();
+            artistRepository = new ArtistsRepositoryMongo();
+            songsRepository = new SongsRepositoryMongo();
         } else if (opcion == 2) {
-            entrenadorRepository = new EntrenadoresRepositorySQL();
-            pokemonsRepository = new PokemonRepositorySQL();
+            artistRepository = new ArtistsRepositorySQL();
+            songsRepository = new SongsRepositorySQL();
         }
-        System.out.println("What Table do you want to use: 1:Entrenadores/ 2:Pokemon");
-        opcionTable = scanner.nextInt();
+        System.out.println("What Table do you want to use: 1:Artists/ 2:Songs");
+        opcionTable = sc.nextInt();
 
         if (opcionTable == 1) {
-            entrenadorRepository.init();
-            startAppEntrenador();
+            artistRepository.init();
+            startAppartist();
         } else {
-            pokemonsRepository.init();
-            startAppPokemon();
+            songsRepository.init();
+            startAppSongs();
         }
     }
 
-    static void startAppEntrenador() {
+    static void startAppartist() {
         while (true) {
-            Entrenadores trainer;
+            Artists artist;
             System.out.println("\33[1;30;45m--- MASTER SCREEN ---\33[0m\n");
             if (opcion == 1) {
-                entrenadorRepository.getAll().stream().flatMap(Entrenadores::toMasterMongo).forEach(System.out::println);
+                artistRepository.getAll().stream().flatMap(Artists::toMasterMongo).forEach(System.out::println);
 
             } else {
-                entrenadorRepository.getAll().stream().flatMap(Entrenadores::toMaster).forEach(System.out::println);
+                artistRepository.getAll().stream().flatMap(Artists::toMaster).forEach(System.out::println);
             }
 
             System.out.print("\n\33[1;30;45m[PERSON] CREATE/READ/UPDATE/DELETE or QUIT:\33[0m ");
-            String option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
+            String option = sc.next().substring(0, 1).toLowerCase(Locale.ROOT);
 
             if (option.equals("q")) {
                 break;
             } else if (option.equals("c")) {
-                System.out.print("Trainer Name:");
-                String name = scanner.next();
-                System.out.print("Trainer Age:");
-                int age = scanner.nextInt();
+                System.out.print("artist Name:");
+                String name = sc.next();
+                System.out.print("artist Age:");
+                int age = sc.nextInt();
                 if (opcion == 1) {
-                    trainer = new Entrenadores(name, age, new ObjectId());
+                    artist = new Artists(name, age, new ObjectId());
                 } else {
-                    trainer = new Entrenadores(name, age);
+                    artist = new Artists(name, age);
                 }
                 try {
-                    entrenadorRepository.insert(trainer);
+                    artistRepository.insert(artist);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
             } else {
-                System.out.print("Trainer Name: ");
-                String trainerName = "";
+                System.out.print("artist Name: ");
+                String artistName = "";
 
-                trainerName = scanner.next();
+                artistName = sc.next();
 
                 if (option.equals("c")) {
                 } else if (option.equals("u")) {
-                    System.out.print("New Trainer name : ");
-                    String newName = scanner.next();
-                    System.out.print("New Trainer age : ");
-                    int newAge = scanner.nextInt();
+                    System.out.print("New artist name : ");
+                    String newName = sc.next();
+                    System.out.print("New artist age : ");
+                    int newAge = sc.nextInt();
                     if (opcion == 1) {
-                        entrenadorRepository.update(new Entrenadores(newName, newAge), trainerName);
+                        artistRepository.update(new Artists(newName, newAge), artistName);
                     } else {
-                        entrenadorRepository.update(new Entrenadores(newName, newAge), trainerName);
+                        artistRepository.update(new Artists(newName, newAge), artistName);
                     }
 
                 } else if (option.equals("d")) {
-                    entrenadorRepository.delete(trainerName);
+                    artistRepository.delete(artistName);
                 }
             }
         }
     }
 
-    static void startAppPokemon() {
+    static void startAppSongs() {
         while (true) {
-            Pokemons pokemon;
+            Song song;
             System.out.println("\33[1;30;45m--- MASTER SCREEN ---\33[0m\n");
             if (opcion == 1) {
-                pokemonsRepository.getAll().stream().flatMap(Pokemons::toMasterMongo).forEach(System.out::println);
+                songsRepository.getAll().stream().flatMap(Song::toMasterMongo).forEach(System.out::println);
 
             } else {
-                pokemonsRepository.getAll().stream().flatMap(Pokemons::toMaster).forEach(System.out::println);
+                songsRepository.getAll().stream().flatMap(Song::toMaster).forEach(System.out::println);
 
             }
 
             System.out.print("\n\33[1;30;45m[PERSON] CREATE/READ/UPDATE/DELETE or QUIT:\33[0m ");
-            String option = scanner.next().substring(0, 1).toLowerCase(Locale.ROOT);
+            String option = sc.next().substring(0, 1).toLowerCase(Locale.ROOT);
 
             if (option.equals("q")) {
                 break;
             } else if (option.equals("c")) {
-                System.out.print("Pokemon Name:");
-                String name = scanner.next();
-                System.out.print("Pokemon Type1:");
-                String tipo1 = scanner.next();
-                System.out.print("Pokemon Type2:");
-                String tipo2 = scanner.next();
+                System.out.print("Song Name:");
+                String name = sc.next();
+                System.out.print("Song duration:");
+                String tipo1 = sc.next();
+                System.out.print("Song rating:");
+                String tipo2 = sc.next();
                 if (opcion == 1) {
-                    pokemon = new Pokemons(name, tipo1, tipo2, new ObjectId());
+                    song = new Song(name, tipo1, tipo2, new ObjectId());
                 } else {
-                    pokemon = new Pokemons(name, tipo1, tipo2);
+                    song = new Song(name, tipo1, tipo2);
                 }
 
 
                 try {
-                    pokemonsRepository.insert(pokemon);
+                    songsRepository.insert(song);
                 } catch (NoSuchFieldException | IllegalAccessException e) {
                     e.printStackTrace();
                 }
             } else {
-                System.out.print("Pokemon Name: ");
-                String pokemonName = "";
+                System.out.print("song Name: ");
+                String songName = "";
 
-                pokemonName = scanner.next();
+                songName = sc.next();
 
                 if (option.equals("c")) {
                 } else if (option.equals("u")) {
-                    System.out.print("New Pokemon name : ");
-                    String newName = scanner.next();
-                    System.out.print("New Pokemon type1 : ");
-                    String newType1 = scanner.next();
-                    System.out.print("New Pokemon type2 : ");
-                    String newType2 = scanner.next();
+                    System.out.print("New song name : ");
+                    String newName = sc.next();
+                    System.out.print("New song duration : ");
+                    String duration = sc.next();
+                    System.out.print("New song rating : ");
+                    String rating = sc.next();
                     if (opcion == 1) {
-                        pokemonsRepository.update(new Pokemons(newName, newType1, newType2), pokemonName);
+                        songsRepository.update(new Song(newName, duration, rating), songName);
                     } else {
-                        pokemonsRepository.update(new Pokemons(newName, newType1, newType2), pokemonName);
+                        songsRepository.update(new Song(newName, duration, rating), songName);
                     }
 
                 } else if (option.equals("d")) {
-                    pokemonsRepository.delete(pokemonName);
+                    songsRepository.delete(songName);
                 }
             }
         }

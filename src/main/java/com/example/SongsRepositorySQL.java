@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-public class PokemonRepositorySQL extends RepositoryMySQL<Pokemons> implements PokemonsRepository {
+public class SongsRepositorySQL extends RepositoryMySQL<Song> implements SongsRepository {
     @Override
     public void poulate() {
         String uri = "jdbc:mysql://localhost/mydatabase2?user=myuser&password=mypass";
@@ -14,7 +14,7 @@ public class PokemonRepositorySQL extends RepositoryMySQL<Pokemons> implements P
             //INSERT
             PreparedStatement statement = conn.prepareStatement("INSERT INTO movies(id,title) VALUES(?,?)");
             statement.setString(1, "1");
-            statement.setString(2, "Brave");
+            statement.setString(2, "Song1");
             statement.executeUpdate();
 
 
